@@ -1,0 +1,45 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+SESSION="cs2"
+
+WORKDIR="/home/csgo/Steam/steamapps/common/Counter-Strike Global Offensive/game/bin/linuxsteamrt64"
+
+CMD="export LD_LIBRARY_PATH=\"$WORKDIR:\$LD_LIBRARY_PATH\" && ./cs2 \
+-usercon \
+-dedicated \
+-nomaster \
+-port 27016 \
+-maxplayers_override 20 \
++game_type 0 \
++game_mode 1 \
++exec server.cfg \
++mapgroup mg_bomb \
++map de_dust2 \
++sv_lan 1"
+
+case "${1:-}" in
+  start)
+    echo "Starting CS2 Server in tmux session: $SESSION..."
+    sudo -iu csgo tmux new-session -d -s "$SESSION" -c "$WORKDIR" "$CMD"
+    ;;
+  stop)
+    echo "Stopping CS2 Server..."
+    sudo -iu csgo tmux kill-session -t "$SESSION"
+    ;;
+  attach)
+    sudo -iu csgo tmux attach -t "$SESSION"
+    ;;
+  status)
+    sudo -iu csgo tmux ls | grep "$SESSION" || echo "CS2 Server is not running."
+    ;;
+  restart)
+    $0 stop || true
+    sleep 2
+    $0 start
+    ;;
+  *)
+    echo "Usage: $0 {start|stop|restart|attach|status}" >&2
+    exit 2
+    ;;
+esac
