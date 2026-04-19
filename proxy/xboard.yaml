@@ -1,4 +1,4 @@
-# 为Clash Meta内核配置
+# 为Clash Meta内核客户端配置的Xboard/V2Board订阅转换文件
 # 从 https://github.com/liandu2024/little/blob/main/yaml/clash-all-noicon.yaml 修改而来
 
 mixed-port: 7890
