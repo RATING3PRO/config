@@ -1,0 +1,9 @@
+services:
+  srs:
+    image: ossrs/srs:5
+    container_name: srs
+    restart: always
+    network_mode: host
+    command: ["./objs/srs", "-c", "/etc/srs/srs.conf"]
+    volumes:
+      - ./srs.conf:/etc/srs/srs.conf:ro
